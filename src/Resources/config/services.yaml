@@ -4,5 +4,35 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  Tourze\DoctrineDedicatedEntityManagerBundle\Service\:
-    resource: '../../Service/'
+  # 专用 EntityManager 工厂服务
+  doctrine_dedicated_entity_manager.factory:
+    class: Tourze\DoctrineDedicatedEntityManagerBundle\Factory\EntityManagerFactory
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@Tourze\DoctrineDedicatedConnectionBundle\Factory\DedicatedConnectionFactory'
+      - '@Tourze\Symfony\RuntimeContextBundle\Service\ContextServiceInterface'
+      - '@?logger'
+    tags:
+      - { name: kernel.reset, method: closeCurrentContext }
+    public: true  # Make it public for testing
+
+  # 专用 ManagerRegistry 工厂服务
+  doctrine_dedicated_manager_registry.factory:
+    class: Tourze\DoctrineDedicatedEntityManagerBundle\Factory\DedicatedManagerRegistryFactory
+    arguments:
+      - '@doctrine_dedicated_entity_manager.factory'
+      - '@Tourze\DoctrineDedicatedConnectionBundle\Factory\DedicatedConnectionFactory'
+      - '@Tourze\Symfony\RuntimeContextBundle\Service\ContextServiceInterface'
+      - '@?logger'
+    tags:
+      - { name: kernel.reset, method: closeCurrentContext }
+    public: true  # Make it public for testing
+
+  # 创建别名方便使用
+  Tourze\DoctrineDedicatedEntityManagerBundle\Factory\EntityManagerFactory:
+    alias: doctrine_dedicated_entity_manager.factory
+    public: false
+
+  Tourze\DoctrineDedicatedEntityManagerBundle\Factory\DedicatedManagerRegistryFactory:
+    alias: doctrine_dedicated_manager_registry.factory
+    public: false

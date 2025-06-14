@@ -1,6 +1,6 @@
 {
   "name": "tourze/doctrine-dedicated-entity-manager-bundle",
-  "description": "对象管理器自动化",
+  "description": "自动化 Doctrine EntityManager 服务注册，通过注解和编译器通道实现专用 EntityManager 的自动创建和注入",
   "license": "MIT",
   "require": {
     "php": "^8.1",
@@ -8,13 +8,16 @@
     "doctrine/doctrine-bundle": "^2.13",
     "doctrine/orm": "^3.0",
     "doctrine/persistence": "^3.1 || ^4",
+    "psr/log": "^3|^2|^1",
     "symfony/config": "^6.4",
     "symfony/dependency-injection": "^6.4",
     "symfony/doctrine-bridge": "^6.4",
     "symfony/framework-bundle": "^6.4",
     "symfony/http-kernel": "^6.4",
     "symfony/yaml": "^6.4 || ^7.1",
-    "tourze/bundle-dependency": "0.0.*"
+    "tourze/bundle-dependency": "0.0.*",
+    "tourze/doctrine-dedicated-connection-bundle": "0.0.*",
+    "tourze/symfony-runtime-context-bundle": "0.0.*"
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",
