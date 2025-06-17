@@ -28,6 +28,7 @@ class DedicatedManagerRegistry extends AbstractManagerRegistry
             $managers,
             $channel,
             $channel,
+            /** @phpstan-ignore-next-line */
             'Doctrine\ORM\Proxy\Proxy'
         );
     }

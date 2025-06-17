@@ -25,9 +25,7 @@ class DoctrineDedicatedEntityManagerExtension extends Extension
             ->setPublic(false);
         
         // Register attribute autoconfiguration
-        if (PHP_VERSION_ID >= 80000) {
-            $this->registerAttributeAutoconfiguration($container);
-        }
+        $this->registerAttributeAutoconfiguration($container);
     }
     
     private function registerAttributeAutoconfiguration(ContainerBuilder $container): void

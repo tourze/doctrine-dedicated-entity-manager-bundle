@@ -80,15 +80,13 @@ class EntityManagerChannelPass implements CompilerPassInterface
 
                 // 处理 EntityManagerInterface 类型参数
                 if ($typeName === EntityManagerInterface::class ||
-                    $typeName === 'Doctrine\ORM\EntityManagerInterface' ||
                     $typeName === 'Doctrine\ORM\EntityManager') {
                     $definition->setArgument($index, new Reference($entityManagerServiceId));
                     continue;
                 }
 
                 // 处理 ManagerRegistry 类型参数
-                if ($typeName === ManagerRegistry::class ||
-                    $typeName === 'Doctrine\Persistence\ManagerRegistry') {
+                if ($typeName === ManagerRegistry::class) {
                     $definition->setArgument($index, new Reference($registryServiceId));
                     continue;
                 }

@@ -76,6 +76,6 @@ class EntityManagerChannelPassTest extends KernelTestCase
         $pass->process($container);
         
         // Should not throw exception or create any services
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 }

@@ -24,10 +24,6 @@ class DedicatedEntityManagerCompilerPass implements CompilerPassInterface
 
     private function processAttributedServices(ContainerBuilder $container): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            return;
-        }
-
         foreach ($container->getDefinitions() as $id => $definition) {
             $class = $definition->getClass();
             if (!$class || !$container->getReflectionClass($class, false)) {

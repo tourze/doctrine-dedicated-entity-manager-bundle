@@ -178,7 +178,7 @@ class DedicatedManagerRegistryTest extends TestCase
 
         // 应该不抛出异常
         $method->invoke($this->registry, 'test_channel_connection');
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     protected function setUp(): void
