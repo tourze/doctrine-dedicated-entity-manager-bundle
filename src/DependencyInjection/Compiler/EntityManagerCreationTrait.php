@@ -17,6 +17,9 @@ trait EntityManagerCreationTrait
     /**
      * 确保 EntityManager 服务存在
      */
+    /**
+     * @param array<string, mixed> $attributes
+     */
     protected function ensureEntityManagerService(ContainerBuilder $container, string $channel, array $attributes = []): void
     {
         $entityManagerId = sprintf('doctrine.orm.%s_entity_manager', $channel);
@@ -38,6 +41,9 @@ trait EntityManagerCreationTrait
 
     /**
      * 确保连接服务存在（委托给 doctrine-dedicated-connection-bundle）
+     */
+    /**
+     * @param array<string, mixed> $attributes
      */
     protected function ensureConnectionService(ContainerBuilder $container, string $channel, array $attributes = []): void
     {

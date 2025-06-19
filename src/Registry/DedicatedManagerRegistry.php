@@ -52,10 +52,10 @@ class DedicatedManagerRegistry extends AbstractManagerRegistry
     /**
      * 获取别名命名空间
      */
-    public function getAliasNamespace($alias): string
+    public function getAliasNamespace(string $alias): string
     {
         // 对于专用注册表，我们不支持别名命名空间
-        throw new \InvalidArgumentException(sprintf('Alias "%s" is not a valid alias in dedicated registry for channel "%s".', $alias, $this->channel));
+        throw new \InvalidArgumentException(sprintf('Alias "%s" is not a valid alias in dedicated registry for channel "%s".', (string) $alias, $this->channel));
     }
 
     /**

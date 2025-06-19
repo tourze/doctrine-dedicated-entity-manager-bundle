@@ -26,12 +26,12 @@ class DedicatedEntityManagerCompilerPass implements CompilerPassInterface
     {
         foreach ($container->getDefinitions() as $id => $definition) {
             $class = $definition->getClass();
-            if (!$class || !$container->getReflectionClass($class, false)) {
+            $reflectionClass = $container->getReflectionClass($class, false);
+            if (null === $class || null === $reflectionClass) {
                 continue;
             }
 
             try {
-                $reflectionClass = $container->getReflectionClass($class);
                 $attributes = $reflectionClass->getAttributes(WithDedicatedEntityManager::class);
                 
                 foreach ($attributes as $attribute) {
@@ -55,8 +55,12 @@ class DedicatedEntityManagerCompilerPass implements CompilerPassInterface
         
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $attributes) {
+                if (!is_array($attributes)) {
+                    continue;
+                }
                 $channel = $attributes['channel'] ?? null;
-                if ($channel) {
+                if (is_string($channel)) {
+                    /** @var array<string, mixed> $attributes */
                     $this->ensureEntityManagerService($container, $channel, $attributes);
                 }
             }

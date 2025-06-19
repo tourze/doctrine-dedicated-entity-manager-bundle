@@ -14,6 +14,9 @@ use Tourze\Symfony\RuntimeContextBundle\Service\ContextServiceInterface;
  */
 class DedicatedManagerRegistryFactory
 {
+    /**
+     * @var array<string, DedicatedManagerRegistry>
+     */
     private array $registries = [];
     private LoggerInterface $logger;
 
@@ -86,6 +89,8 @@ class DedicatedManagerRegistryFactory
 
     /**
      * 获取所有已创建的注册表
+     * 
+     * @return array<string, DedicatedManagerRegistry>
      */
     public function getRegistries(): array
     {

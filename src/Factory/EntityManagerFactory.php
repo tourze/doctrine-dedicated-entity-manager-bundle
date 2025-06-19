@@ -15,6 +15,9 @@ use Tourze\Symfony\RuntimeContextBundle\Service\ContextServiceInterface;
  */
 class EntityManagerFactory
 {
+    /**
+     * @var array<string, EntityManagerInterface>
+     */
     private array $entityManagers = [];
     private LoggerInterface $logger;
 
@@ -36,8 +39,9 @@ class EntityManagerFactory
         // 获取上下文相关的 EntityManager 键
         $contextKey = $this->getContextKey($channel);
 
-        if (isset($this->entityManagers[$contextKey])) {
-            return $this->entityManagers[$contextKey];
+        $existingEntityManager = $this->entityManagers[$contextKey] ?? null;
+        if ($existingEntityManager instanceof EntityManagerInterface) {
+            return $existingEntityManager;
         }
 
         $this->logger->debug('Creating dedicated EntityManager for channel: {channel} in context: {context}', [
@@ -84,15 +88,18 @@ class EntityManagerFactory
      */
     private function closeEntityManager(string $contextKey): void
     {
-        if (isset($this->entityManagers[$contextKey])) {
+        $entityManager = $this->entityManagers[$contextKey] ?? null;
+        if ($entityManager instanceof EntityManagerInterface) {
             $this->logger->debug('Closing dedicated EntityManager: {contextKey}', ['contextKey' => $contextKey]);
-            $this->entityManagers[$contextKey]->close();
+            $entityManager->close();
             unset($this->entityManagers[$contextKey]);
         }
     }
 
     /**
      * 获取所有已创建的 EntityManager
+     * 
+     * @return array<string, EntityManagerInterface>
      */
     public function getEntityManagers(): array
     {
@@ -119,7 +126,9 @@ class EntityManagerFactory
         if ($contextId === null) {
             // 关闭所有 EntityManager
             foreach ($this->entityManagers as $entityManager) {
-                $entityManager->close();
+                if ($entityManager instanceof EntityManagerInterface) {
+                    $entityManager->close();
+                }
             }
             $this->entityManagers = [];
         } else {

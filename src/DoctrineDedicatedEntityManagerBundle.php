@@ -42,6 +42,6 @@ class DoctrineDedicatedEntityManagerBundle extends Bundle implements BundleDepen
             $this->extension = new DoctrineDedicatedEntityManagerExtension();
         }
 
-        return $this->extension !== false ? $this->extension : null;
+        return $this->extension instanceof ExtensionInterface ? $this->extension : null;
     }
 }

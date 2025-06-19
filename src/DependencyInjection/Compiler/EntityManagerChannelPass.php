@@ -29,8 +29,11 @@ class EntityManagerChannelPass implements CompilerPassInterface
             $definition = $container->getDefinition($id);
 
             foreach ($tags as $attributes) {
+                if (!is_array($attributes)) {
+                    continue;
+                }
                 $channel = $attributes['channel'] ?? null;
-                if (!$channel) {
+                if (!is_string($channel)) {
                     throw new \InvalidArgumentException(sprintf(
                         'Service "%s" has a "doctrine.dedicated_entity_manager" tag without a "channel" attribute.',
                         $id
@@ -56,15 +59,15 @@ class EntityManagerChannelPass implements CompilerPassInterface
     private function processServiceArguments(ContainerBuilder $container, Definition $definition, string $entityManagerServiceId, string $registryServiceId): void
     {
         $class = $definition->getClass();
-        if (!$class || !$container->getReflectionClass($class, false)) {
+        $reflectionClass = $container->getReflectionClass($class, false);
+        if (null === $class || null === $reflectionClass) {
             return;
         }
 
         try {
-            $reflection = $container->getReflectionClass($class);
-            $constructor = $reflection->getConstructor();
+            $constructor = $reflectionClass->getConstructor();
 
-            if (!$constructor) {
+            if (null === $constructor) {
                 return;
             }
 
