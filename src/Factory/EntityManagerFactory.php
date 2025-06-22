@@ -98,7 +98,7 @@ class EntityManagerFactory
 
     /**
      * 获取所有已创建的 EntityManager
-     * 
+     *
      * @return array<string, EntityManagerInterface>
      */
     public function getEntityManagers(): array
