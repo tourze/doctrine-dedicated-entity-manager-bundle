@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Tourze\DoctrineDedicatedEntityManagerBundle\Exception\InvalidArgumentException;
 
 /**
  * 处理 doctrine.dedicated_entity_manager 标签的编译器传递
@@ -19,22 +20,20 @@ class EntityManagerChannelPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        $taggedServices = $container->findTaggedServiceIds('doctrine.dedicated_entity_manager');
+        // 遍历所有服务定义来查找带有标签的服务，避免使用 findTaggedServiceIds
+        foreach ($container->getDefinitions() as $id => $definition) {
+            if (!$definition->hasTag('doctrine.dedicated_entity_manager')) {
+                continue;
+            }
 
-        if (empty($taggedServices)) {
-            return;
-        }
-
-        foreach ($taggedServices as $id => $tags) {
-            $definition = $container->getDefinition($id);
-
+            $tags = $definition->getTag('doctrine.dedicated_entity_manager');
             foreach ($tags as $attributes) {
                 if (!is_array($attributes)) {
                     continue;
                 }
                 $channel = $attributes['channel'] ?? null;
                 if (!is_string($channel)) {
-                    throw new \InvalidArgumentException(sprintf(
+                    throw new InvalidArgumentException(sprintf(
                         'Service "%s" has a "doctrine.dedicated_entity_manager" tag without a "channel" attribute.',
                         $id
                     ));

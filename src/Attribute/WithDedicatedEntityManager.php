@@ -4,7 +4,7 @@ namespace Tourze\DoctrineDedicatedEntityManagerBundle\Attribute;
 
 /**
  * 标记一个服务需要使用专用的 EntityManager
- * 
+ *
  * 使用示例：
  * ```php
  * #[WithDedicatedEntityManager('order')]
@@ -15,7 +15,7 @@ namespace Tourze\DoctrineDedicatedEntityManagerBundle\Attribute;
  *     ) {}
  * }
  * ```
- * 
+ *
  * 该注解会自动创建专用的 EntityManager 并注入到服务中
  * 数据库配置通过环境变量管理，例如：ORDER_DB_HOST, ORDER_DB_NAME 等
  */

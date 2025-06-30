@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\AbstractManagerRegistry;
 use Tourze\DoctrineDedicatedConnectionBundle\Factory\DedicatedConnectionFactory;
 use Tourze\DoctrineDedicatedEntityManagerBundle\Factory\EntityManagerFactory;
+use Tourze\DoctrineDedicatedEntityManagerBundle\Exception\InvalidArgumentException;
 
 /**
  * 专用的 ManagerRegistry 实现
@@ -55,7 +56,7 @@ class DedicatedManagerRegistry extends AbstractManagerRegistry
     public function getAliasNamespace(string $alias): string
     {
         // 对于专用注册表，我们不支持别名命名空间
-        throw new \InvalidArgumentException(sprintf('Alias "%s" is not a valid alias in dedicated registry for channel "%s".', (string) $alias, $this->channel));
+        throw new InvalidArgumentException(sprintf('Alias "%s" is not a valid alias in dedicated registry for channel "%s".', (string) $alias, $this->channel));
     }
 
     /**
@@ -97,7 +98,7 @@ class DedicatedManagerRegistry extends AbstractManagerRegistry
             return $this->getConnection();
         }
 
-        throw new \InvalidArgumentException(sprintf('Unknown service "%s" for channel "%s".', $name, $this->channel));
+        throw new InvalidArgumentException(sprintf('Unknown service "%s" for channel "%s".', $name, $this->channel));
     }
 
     /**

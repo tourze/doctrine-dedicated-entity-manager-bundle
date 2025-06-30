@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Tourze\DoctrineDedicatedEntityManagerBundle\Registry\DedicatedManagerRegistry;
+use Tourze\DoctrineDedicatedEntityManagerBundle\Exception\ConfigurationException;
 
 /**
  * 共享的 EntityManager 创建逻辑
@@ -57,7 +58,7 @@ trait EntityManagerCreationTrait
         // 检查是否存在 dedicated connection factory
         if (!$container->hasDefinition('doctrine_dedicated_connection.factory') && 
             !$container->hasAlias('doctrine_dedicated_connection.factory')) {
-            throw new \RuntimeException(sprintf(
+            throw new ConfigurationException(sprintf(
                 'Cannot create dedicated connection for channel "%s". ' .
                 'The doctrine-dedicated-connection-bundle is required but not properly configured.',
                 $channel

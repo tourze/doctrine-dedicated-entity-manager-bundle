@@ -17,7 +17,7 @@ class DedicatedEntityManagerCompilerPass implements CompilerPassInterface
     {
         // 处理带有 WithDedicatedEntityManager 注解的服务
         $this->processAttributedServices($container);
-        
+
         // 处理手动标记的服务（向后兼容）
         $this->processTaggedServices($container);
     }
@@ -33,11 +33,11 @@ class DedicatedEntityManagerCompilerPass implements CompilerPassInterface
 
             try {
                 $attributes = $reflectionClass->getAttributes(WithDedicatedEntityManager::class);
-                
+
                 foreach ($attributes as $attribute) {
                     /** @var WithDedicatedEntityManager $attributeInstance */
                     $attributeInstance = $attribute->newInstance();
-                    
+
                     // 添加标签
                     $definition->addTag('doctrine.dedicated_entity_manager', [
                         'channel' => $attributeInstance->channel,
@@ -51,9 +51,13 @@ class DedicatedEntityManagerCompilerPass implements CompilerPassInterface
 
     private function processTaggedServices(ContainerBuilder $container): void
     {
-        $taggedServices = $container->findTaggedServiceIds('doctrine.dedicated_entity_manager');
-        
-        foreach ($taggedServices as $id => $tags) {
+        // 遍历所有服务定义来查找带有标签的服务，避免使用 findTaggedServiceIds
+        foreach ($container->getDefinitions() as $id => $definition) {
+            if (!$definition->hasTag('doctrine.dedicated_entity_manager')) {
+                continue;
+            }
+
+            $tags = $definition->getTag('doctrine.dedicated_entity_manager');
             foreach ($tags as $attributes) {
                 if (!is_array($attributes)) {
                     continue;
